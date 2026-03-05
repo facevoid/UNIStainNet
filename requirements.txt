@@ -1,0 +1,12 @@
+torch>=2.0
+torchvision>=0.15
+pytorch-lightning>=2.0
+timm>=0.9
+lpips>=0.1.4
+torchmetrics>=1.0
+scipy>=1.10
+scikit-learn>=1.2
+Pillow>=9.0
+numpy>=1.24
+tqdm
+wandb
