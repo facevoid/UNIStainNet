@@ -109,10 +109,12 @@ class UNIFeatureProcessorHighRes(nn.Module):
         Also: 32→16 downsample → feat_16 (512ch, for bottleneck)
     """
 
-    def __init__(self, uni_dim=1024, base_channels=512, spatial_size=32):
+    def __init__(self, uni_dim=1024, base_channels=512, spatial_size=32,
+                 output_512=False):
         super().__init__()
         self.base_channels = base_channels
         self.spatial_size = spatial_size
+        self.output_512 = output_512
         ch = base_channels
 
         # Project UNI 1024-dim → 512-dim per token
@@ -171,6 +173,18 @@ class UNIFeatureProcessorHighRes(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
         )
 
+        # 256→512 upsample (for 1024 models with SPADE at dec1)
+        if output_512:
+            ch_512 = ch // 16  # 32
+            self.up_512 = nn.Sequential(
+                nn.ConvTranspose2d(ch_256, ch_512, 4, stride=2, padding=1),
+                nn.InstanceNorm2d(ch_512),
+                nn.LeakyReLU(0.2, inplace=True),
+                nn.Conv2d(ch_512, ch_512, 3, padding=1),
+                nn.InstanceNorm2d(ch_512),
+                nn.LeakyReLU(0.2, inplace=True),
+            )
+
     def forward(self, uni_features):
         """
         Args:
@@ -197,10 +211,16 @@ class UNIFeatureProcessorHighRes(nn.Module):
         feat_128 = self.up_128(feat_64)  # [B, 128, 128, 128]
         feat_256 = self.up_256(feat_128) # [B, 64, 256, 256]
 
-        return {
+        out = {
             16: feat_16,
             32: feat_32,
             64: feat_64,
             128: feat_128,
             256: feat_256,
         }
+
+        if self.output_512:
+            feat_512 = self.up_512(feat_256)  # [B, 32, 512, 512]
+            out[512] = feat_512
+
+        return out

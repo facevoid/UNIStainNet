@@ -97,7 +97,8 @@ def extract_features_for_crop(uni_model, he_crop_01, spatial_pool_size=32):
 
 
 @torch.no_grad()
-def generate_for_stain(model, uni_model, dataloader, stain_label, guidance_scale=1.0, seed=42):
+def generate_for_stain(model, uni_model, dataloader, stain_label, guidance_scale=1.0, seed=42,
+                       spatial_pool_size=32):
     """Generate IHC images for a specific stain."""
     all_gen, all_real, all_he, all_fnames = [], [], [], []
 
@@ -110,7 +111,8 @@ def generate_for_stain(model, uni_model, dataloader, stain_label, guidance_scale
 
         # Extract UNI features
         he_01 = ((he + 1) / 2).clamp(0, 1)
-        uni = extract_features_for_crop(uni_model, he_01).cuda()
+        uni = extract_features_for_crop(uni_model, he_01,
+                                        spatial_pool_size=spatial_pool_size).cuda()
 
         gen = model.generate(he, uni, stain_labels,
                              guidance_scale=guidance_scale,
@@ -154,6 +156,10 @@ def main():
     model = UNIStainNetTrainer.load_from_checkpoint(args.checkpoint, strict=False)
     model = model.cuda().eval()
 
+    # Read spatial size from checkpoint hparams (default 32 for backward compat)
+    spatial_pool_size = getattr(model.hparams, 'uni_spatial_size', 32)
+    print(f"UNI spatial size: {spatial_pool_size}x{spatial_pool_size}")
+
     # Load UNI
     uni_model = load_uni_model()
 
@@ -192,7 +198,8 @@ def main():
         # Generate
         gen, real, he, fnames = generate_for_stain(
             model, uni_model, test_loader, stain_label,
-            guidance_scale=args.guidance_scale)
+            guidance_scale=args.guidance_scale,
+            spatial_pool_size=spatial_pool_size)
         print(f"Generated {len(gen)} images")
 
         if args.composite_bg:

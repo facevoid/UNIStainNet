@@ -29,7 +29,7 @@ class SPADEUNetGenerator(nn.Module):
 
     def __init__(self, num_classes=5, class_dim=64, uni_dim=1024,
                  input_skip=False, edge_encoder=False, edge_base_ch=32,
-                 uni_spatial_size=4, image_size=512):
+                 uni_spatial_size=4, image_size=512, uni_spade_at_512=False):
         super().__init__()
         self.num_classes = num_classes
         self.class_dim = class_dim
@@ -37,6 +37,7 @@ class SPADEUNetGenerator(nn.Module):
         self.edge_encoder_flag = edge_encoder
         self.uni_spatial_size = uni_spatial_size
         self.image_size = image_size
+        self.uni_spade_at_512 = uni_spade_at_512
 
         # Class embedding (5 classes: 0, 1+, 2+, 3+, null)
         self.class_embed = nn.Embedding(num_classes, class_dim)
@@ -46,6 +47,7 @@ class SPADEUNetGenerator(nn.Module):
             # High-res patch tokens (e.g., 32x32 = 1024 tokens)
             self.uni_processor = UNIFeatureProcessorHighRes(
                 uni_dim=uni_dim, base_channels=512, spatial_size=uni_spatial_size,
+                output_512=(uni_spade_at_512 and image_size == 1024),
             )
         else:
             # Original CLS-token features (4x4 = 16 tokens)
@@ -139,11 +141,19 @@ class SPADEUNetGenerator(nn.Module):
         if image_size == 1024:
             # D1 (new): upsample 256→512, skip from enc0 (32ch) + edge@512
             dec1_in_ch = 64 + 32 + edge_ch[512]
-            self.dec1_conv = nn.Sequential(
-                nn.Conv2d(dec1_in_ch, 64, 3, padding=1),
-                nn.InstanceNorm2d(64),
-                nn.LeakyReLU(0.2, inplace=True),
-            )
+            if uni_spade_at_512:
+                # UNI SPADE conditioning at 512 level (uni_ch=32 at this scale)
+                self.dec1_conv = nn.Conv2d(dec1_in_ch, 64, 3, padding=1)
+                self.dec1_spade = SPADEBlock(64, uni_channels=32, class_dim=class_dim)
+                self.dec1_act = nn.LeakyReLU(0.2, inplace=True)
+            else:
+                self.dec1_conv = nn.Sequential(
+                    nn.Conv2d(dec1_in_ch, 64, 3, padding=1),
+                    nn.InstanceNorm2d(64),
+                    nn.LeakyReLU(0.2, inplace=True),
+                )
+                self.dec1_spade = None
+                self.dec1_act = None
             # Output: upsample 512→1024, optional H&E input skip
             output_in_ch = 64 + (3 if input_skip else 0)
             self.output = nn.Sequential(
@@ -265,7 +275,11 @@ class SPADEUNetGenerator(nn.Module):
             x = F.interpolate(x, scale_factor=2, mode='bilinear', align_corners=False)
             skip1 = [x, e0] + ([edge_maps[512]] if edge_maps else [])
             x = torch.cat(skip1, dim=1)
-            x = self.dec1_conv(x)  # [B, 64, 512, 512]
+            x = self.dec1_conv(x)
+            if self.dec1_spade is not None:
+                x = self.dec1_spade(x, uni_maps[512], class_emb)
+                x = self.dec1_act(x)
+            # [B, 64, 512, 512]
 
             # Output: upsample 512→1024, optional H&E input skip
             x = F.interpolate(x, scale_factor=2, mode='bilinear', align_corners=False)

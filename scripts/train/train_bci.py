@@ -74,7 +74,7 @@ def main():
         # GAN training
         r1_weight=10.0,
         r1_every=16,
-        adversarial_start_step=2000,
+        adversarial_start_step=500,
         # CFG dropout
         cfg_drop_class_prob=0.10,
         cfg_drop_uni_prob=0.10,
@@ -100,7 +100,6 @@ def main():
         save_top_k=3,
         monitor='val/lpips',
         mode='min',
-        every_n_train_steps=1000,
         save_last=True,
     )
 

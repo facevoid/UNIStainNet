@@ -109,7 +109,8 @@ def extract_features_for_crop(uni_model, he_crop_01, spatial_pool_size=32):
 
 
 @torch.no_grad()
-def generate_all(model, uni_model, dataloader, guidance_scale=1.0, seed=42):
+def generate_all(model, uni_model, dataloader, guidance_scale=1.0, seed=42,
+                 spatial_pool_size=32):
     """Generate HER2 images for the entire test set."""
     all_gen, all_real, all_he, all_labels, all_fnames = [], [], [], [], []
 
@@ -120,7 +121,8 @@ def generate_all(model, uni_model, dataloader, guidance_scale=1.0, seed=42):
 
         # Extract UNI features on-the-fly
         he_01 = ((he + 1) / 2).clamp(0, 1)
-        uni = extract_features_for_crop(uni_model, he_01).cuda()
+        uni = extract_features_for_crop(uni_model, he_01,
+                                        spatial_pool_size=spatial_pool_size).cuda()
 
         gen = model.generate(he, uni, labels,
                              guidance_scale=guidance_scale,
@@ -166,6 +168,10 @@ def main():
     model = UNIStainNetTrainer.load_from_checkpoint(args.checkpoint, strict=False)
     model = model.cuda().eval()
 
+    # Read spatial size from checkpoint hparams (default 32 for backward compat)
+    spatial_pool_size = getattr(model.hparams, 'uni_spatial_size', 32)
+    print(f"UNI spatial size: {spatial_pool_size}x{spatial_pool_size}")
+
     # Load UNI for on-the-fly feature extraction
     uni_model = load_uni_model()
 
@@ -189,7 +195,8 @@ def main():
     # Generate
     print(f"\nGenerating (cfg={args.guidance_scale})...")
     gen, real, he, labels, fnames = generate_all(
-        model, uni_model, test_loader, guidance_scale=args.guidance_scale)
+        model, uni_model, test_loader, guidance_scale=args.guidance_scale,
+        spatial_pool_size=spatial_pool_size)
     print(f"Generated {len(gen)} images")
 
     # Free UNI model (no longer needed for generation)

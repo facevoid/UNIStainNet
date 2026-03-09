@@ -100,6 +100,8 @@ class UNIStainNetTrainer(pl.LightningModule):
         uni_spatial_pool_size=32,
         # Resolution
         image_size=512,
+        # 1024 architecture: extend UNI SPADE to 512 level
+        uni_spade_at_512=False,
         # Per-label names for multi-stain logging
         label_names=None,
     ):
@@ -123,6 +125,7 @@ class UNIStainNetTrainer(pl.LightningModule):
             edge_base_ch=edge_base_ch,
             uni_spatial_size=uni_spatial_size,
             image_size=image_size,
+            uni_spade_at_512=uni_spade_at_512,
         )
 
         # Discriminator (global multi-scale)

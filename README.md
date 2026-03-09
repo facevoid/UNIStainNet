@@ -19,21 +19,37 @@
 
 | Stain | FID ↓ | KID×1k ↓ | SSIM ↑ | P-r ↑ | DAB KL ↓ |
 |-------|-------|-----------|--------|-------|----------|
-| HER2  | **34.5** | **2.2** | **0.229** | 0.929 | 0.186 |
-| Ki67  | **27.2** | **1.8** | **0.282** | 0.943 | 0.126 |
-| ER    | **29.2** | **1.8** | **0.258** | 0.938 | 0.149 |
-| PR    | **29.0** | **1.1** | **0.269** | 0.938 | 0.176 |
+| HER2  | **34.5** | **2.2** | **0.229** | 0.929 | 0.166 |
+| Ki67  | **27.2** | **1.8** | **0.282** | 0.927 | 0.119 |
+| ER    | **29.2** | **1.8** | **0.258** | 0.949 | 0.182 |
+| PR    | **29.0** | **1.1** | **0.269** | 0.943 | 0.171 |
 
 ### BCI (HER2)
 
-| FID ↓ | KID×1k ↓ | LPIPS ↓ | SSIM ↑ | PSNR ↑ | P-r ↑ | DAB KL ↓ |
-|-------|-----------|---------|--------|--------|-------|----------|
-| **34.6** | **6.1** | 0.426 | **0.537** | **19.5** | **0.861** | **0.728** |
+| FID ↓ | KID×1k ↓ | SSIM ↑ | P-r ↑ | DAB KL ↓ |
+|-------|-----------|--------|-------|----------|
+| **34.6** | **6.5** | **0.541** | **0.867** | **0.482** |
+
+### Multi-Stain Generation (MIST)
+
+A single model produces stain-specific expression patterns — membrane (HER2), punctate nuclear (Ki67), and diffuse nuclear (ER/PR):
+
+<p align="center">
+  <img src="assets/mist_multistain_gt_gen.jpg" width="100%"/>
+</p>
+
+### Cross-Stain Generation
+
+The same H&E input translated to four IHC stains by changing only the stain embedding. ER and PR produce visually similar diffuse nuclear staining, consistent with their co-expression in most breast cancers:
+
+<p align="center">
+  <img src="assets/cross_stain_grid.png" width="100%"/>
+</p>
 
 ### Qualitative Comparisons
 
 <details>
-<summary>MIST — multi-stain generation (click to expand)</summary>
+<summary>MIST — HER2 comparison with prior methods (click to expand)</summary>
 <img src="assets/mist_comparison_grid.jpg" width="100%"/>
 </details>
 
