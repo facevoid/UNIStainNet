@@ -4,133 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNIStainNet: Foundation-Model-Guided Virtual IHC Staining</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1a3a6b;
-            --accent: #2d6da8;
-            --text: #2c2c2c;
-            --muted: #666;
-            --bg: #fafafa;
-            --card-bg: #fff;
-            --border: #e0e0e0;
-            --max-width: 960px;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            color: var(--text);
-            background: var(--bg);
-            line-height: 1.6;
-        }
-
-        /* ── Hero ────────────────────────────────── */
-        .hero {
-            background: linear-gradient(135deg, #0f2440 0%, #1a4a7a 50%, #2d6da8 100%);
-            color: #fff;
-            padding: 4rem 1.5rem 3rem;
-            text-align: center;
-        }
-        .hero h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
-        .hero .subtitle {
-            font-size: 1.15rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto 1.5rem;
-        }
-        .hero .badges {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-        .hero .badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .hero .links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .hero .links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: transform 0.15s, box-shadow 0.15s;
-        }
-        .hero .links a:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .btn-primary {
+            font-family: 'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+            color: #333;
             background: #fff;
-            color: var(--primary);
-        }
-        .btn-secondary {
-            background: rgba(255,255,255,0.12);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.3);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Layout ──────────────────────────────── */
         .container {
-            max-width: var(--max-width);
+            max-width: 800px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
 
-        section {
-            padding: 3rem 0;
-        }
-        section + section {
-            border-top: 1px solid var(--border);
+        /* ── Header ─────────────────────────────── */
+        .header {
+            padding: 3.5rem 1.5rem 2rem;
+            text-align: center;
         }
 
-        h2 {
-            font-size: 1.6rem;
+        .header h1 {
+            font-size: 2.2rem;
             font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        h3 {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+            line-height: 1.25;
+            margin-bottom: 1.2rem;
         }
 
-        p { margin-bottom: 1rem; color: var(--muted); }
+        .authors {
+            font-size: 1.05rem;
+            color: #444;
+            margin-bottom: 0.3rem;
+        }
+        .authors a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .authors a:hover {
+            text-decoration: underline;
+        }
 
-        /* ── Abstract / TLDR ─────────────────────── */
-        .abstract {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
+        .affiliations {
+            font-size: 0.9rem;
+            color: #888;
             margin-bottom: 1.5rem;
         }
-        .abstract p { color: var(--text); margin-bottom: 0; }
 
-        /* ── Figures ─────────────────────────────── */
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.45rem 1rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            background: #333;
+            transition: background 0.15s;
+        }
+        .links a:hover {
+            background: #555;
+        }
+        .links a.demo-link {
+            background: #2563eb;
+        }
+        .links a.demo-link:hover {
+            background: #1d4ed8;
+        }
+
+        /* ── Sections ───────────────────────────── */
+        .section {
+            padding: 1.8rem 0;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .section p {
+            color: #4a4a4a;
+            margin-bottom: 0.8rem;
+            text-align: justify;
+        }
+
+        /* ── Teaser figure ──────────────────────── */
+        .teaser {
+            padding: 0.5rem 0 1.5rem;
+            text-align: center;
+        }
+        .teaser img {
+            max-width: 100%;
+            height: auto;
+        }
+        .teaser .caption {
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            color: #777;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ── Figures ────────────────────────────── */
         .figure {
             margin: 1.5rem 0;
             text-align: center;
@@ -138,183 +131,179 @@
         .figure img {
             max-width: 100%;
             height: auto;
-            border-radius: 4px;
-            border: 1px solid var(--border);
         }
-        .figure figcaption {
+        .figure .caption {
             margin-top: 0.5rem;
             font-size: 0.85rem;
-            color: var(--muted);
-            font-style: italic;
+            color: #777;
+            text-align: left;
+        }
+        .figure .caption strong {
+            color: #555;
         }
 
-        /* ── Table ───────────────────────────────── */
+        /* ── Tables ─────────────────────────────── */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
         th, td {
-            padding: 0.6rem 0.8rem;
+            padding: 0.5rem 0.7rem;
             text-align: center;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #e5e7eb;
         }
         th {
-            background: #f0f4f8;
             font-weight: 600;
-            color: var(--primary);
-        }
-        tr:hover { background: #f8fafc; }
-
-        /* ── Key features grid ───────────────────── */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.2rem;
-            margin: 1.5rem 0;
-        }
-        .feature-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.2rem;
-        }
-        .feature-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.4rem;
-        }
-        .feature-card p {
-            font-size: 0.88rem;
-            margin-bottom: 0;
+            color: #1a1a1a;
+            border-bottom: 2px solid #d1d5db;
         }
 
-        /* ── Footer ──────────────────────────────── */
+        /* ── BibTeX ─────────────────────────────── */
+        .bibtex-box {
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem 1.2rem;
+            font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre;
+            color: #444;
+            position: relative;
+        }
+
+        /* ── Divider ────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 0;
+        }
+
+        /* ── Footer ─────────────────────────────── */
         footer {
             text-align: center;
             padding: 2rem 1.5rem;
-            color: var(--muted);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--border);
+            color: #aaa;
+            font-size: 0.78rem;
+        }
+        footer a {
+            color: #999;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
 
-        /* ── Responsive ──────────────────────────── */
+        /* ── Responsive ─────────────────────────── */
         @media (max-width: 600px) {
-            .hero h1 { font-size: 1.8rem; }
-            .hero .subtitle { font-size: 1rem; }
-            h2 { font-size: 1.3rem; }
-            .features { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.6rem; }
+            .section-title { font-size: 1.15rem; }
+            .container { padding: 0 1rem; }
         }
     </style>
 </head>
 <body>
 
-<!-- ════════════ Hero ════════════ -->
-<header class="hero">
-    <h1>UNIStainNet</h1>
-    <p class="subtitle">
-        Virtual Immunohistochemistry Staining from H&amp;E using
-        Foundation Model Spatial Conditioning
+<!-- ════════════ Header ════════════ -->
+<header class="header">
+    <h1>UNIStainNet: Foundation-Model-Guided<br>Virtual IHC Staining from H&amp;E</h1>
+    <p class="authors">
+        <a href="https://github.com/facevoid">Jillur Rahman Saurav</a><sup>1</sup>,
+        Thuong Le Hoai Pham<sup>1</sup>,
+        Pritam Mukherjee<sup>2</sup>,
+        Paul Yi<sup>2</sup>,
+        Brent A. Orr<sup>3</sup>,
+        Jacob M. Luber<sup>2</sup>
     </p>
-    <div class="badges">
-        <span class="badge">Breast Cancer Biomarkers</span>
-        <span class="badge">HER2 / Ki67 / ER / PR</span>
-        <span class="badge">One Model, 4 Stains</span>
-    </div>
+    <p class="affiliations">
+        <sup>1</sup>University of Texas at Arlington &nbsp;
+        <sup>2</sup>Department of Radiology, St. Jude Children's Research Hospital &nbsp;
+        <sup>3</sup>Department of Pathology, St. Jude Children's Research Hospital
+    </p>
     <div class="links">
-        <a href="https://huggingface.co/spaces/faceless-void/UNIStainNet" class="btn-primary" target="_blank">
-            Interactive Demo
-        </a>
-        <a href="https://github.com/facevoid/UNIStainNet" class="btn-secondary" target="_blank">
-            Code
-        </a>
-        <a href="https://arxiv.org/abs/2603.12716" class="btn-secondary" target="_blank">
-            Paper (arXiv)
-        </a>
+        <a href="https://arxiv.org/abs/2603.12716">Paper</a>
+        <a href="https://github.com/facevoid/UNIStainNet">Code</a>
+        <a href="https://huggingface.co/spaces/faceless-void/UNIStainNet" class="demo-link">Demo</a>
     </div>
 </header>
 
+<!-- ════════════ Teaser ════════════ -->
+<div class="container">
+    <div class="teaser">
+        <img src="static/cross_stain.jpg"
+             alt="Cross-stain generation: one H&E input produces HER2, Ki67, ER, and PR">
+        <p class="caption">
+            A single H&amp;E input generates four IHC stains using one unified model.
+            The model learns stain-specific patterns: membrane staining for HER2,
+            nuclear punctate for Ki67, and diffuse nuclear for ER and PR.
+        </p>
+    </div>
+</div>
+
+<hr>
+
 <!-- ════════════ Abstract ════════════ -->
-<section>
-    <div class="container">
-        <h2>Abstract</h2>
-        <div class="abstract">
-            <p>
-                We present <strong>UNIStainNet</strong>, a deep learning framework for virtual
-                immunohistochemistry (IHC) staining from standard hematoxylin &amp; eosin (H&amp;E)
-                histopathology images. Our approach uses a SPADE-UNet generator conditioned on
-                dense spatial features from a frozen UNI pathology foundation model (ViT-L/16),
-                enabling the generator to leverage fine-grained tissue morphology for accurate
-                stain prediction. A FiLM-based stain embedding allows a single unified 42M-parameter
-                model to generate all four clinically important breast cancer biomarkers &mdash;
-                HER2, Ki67, ER, and PR &mdash; in a single forward pass. Our misalignment-aware
-                loss suite (perceptual loss, DAB intensity supervision, unconditional discriminator)
-                is specifically designed for the inherent spatial shifts between consecutive tissue
-                sections used for training. UNIStainNet achieves state-of-the-art results on both
-                the BCI and MIST benchmarks, with Pearson-R &gt; 0.92 across all four stains.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- ════════════ Key Features ════════════ -->
-<section>
-    <div class="container">
-        <h2>Key Features</h2>
-        <div class="features">
-            <div class="feature-card">
-                <h3>UNI Spatial Conditioning</h3>
-                <p>Dense 32&times;32 spatial tokens from a frozen UNI pathology foundation model
-                   provide fine-grained morphological context at every decoder scale via SPADE normalization.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Unified Multi-Stain Model</h3>
-                <p>A single model generates all 4 IHC stains through FiLM-based stain embeddings,
-                   learning shared morphological representations across biomarkers.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Misalignment-Aware Training</h3>
-                <p>Training pairs from consecutive tissue sections have inherent 10&ndash;50 pixel shifts.
-                   Our loss suite (LPIPS, DAB intensity, unconditional discriminator) handles this gracefully.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Classifier-Free Guidance</h3>
-                <p>10% class and UNI dropout during training enables tunable generation strength
-                   at inference time via guidance scale.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ════════════ Architecture ════════════ -->
-<section>
-    <div class="container">
-        <h2>Architecture</h2>
+<div class="container">
+    <div class="section">
+        <h2 class="section-title">Abstract</h2>
         <p>
-            The H&amp;E input is encoded by a convolutional encoder while a frozen UNI ViT-L/16
-            extracts dense spatial features via 4&times;4 sub-crop tiling. The SPADE+FiLM decoder
+            We present <strong>UNIStainNet</strong>, a deep learning framework for virtual
+            immunohistochemistry (IHC) staining from standard hematoxylin &amp; eosin (H&amp;E)
+            histopathology images. Our approach uses a SPADE-UNet generator conditioned on
+            dense spatial features from a frozen UNI pathology foundation model (ViT-L/16),
+            enabling the generator to leverage fine-grained tissue morphology for accurate
+            stain prediction. A FiLM-based stain embedding allows a single unified 42M-parameter
+            model to generate all four clinically important breast cancer biomarkers &mdash;
+            HER2, Ki67, ER, and PR &mdash; in a single forward pass. Our misalignment-aware
+            loss suite (perceptual loss, DAB intensity supervision, unconditional discriminator)
+            is specifically designed for the inherent spatial shifts between consecutive tissue
+            sections used for training. UNIStainNet achieves state-of-the-art results on both
+            the BCI and MIST benchmarks, with Pearson-R &gt; 0.92 across all four stains.
+        </p>
+    </div>
+</div>
+
+<hr>
+
+<!-- ════════════ Method ════════════ -->
+<div class="container">
+    <div class="section">
+        <h2 class="section-title">Method</h2>
+        <p>
+            The 512&times;512 H&amp;E input is encoded by a convolutional encoder while a frozen
+            UNI ViT-L/16 extracts dense spatial features via 4&times;4 sub-crop tiling, yielding
+            1,024 spatially-resolved tokens at 32&times;32 resolution. The SPADE+FiLM decoder
             modulates each layer using both spatially-resolved UNI features (via SPADE) and
-            stain-specific embeddings (via FiLM), producing the target IHC stain in a single
-            forward pass.
+            stain-specific embeddings (via FiLM), allowing a single set of decoder weights to
+            produce any of the four target IHC stains.
         </p>
         <figure class="figure">
             <img src="static/architecture.jpg"
-                 alt="UNIStainNet architecture: H&E encoder, UNI spatial conditioning, SPADE+FiLM decoder">
-            <figcaption>
-                <strong>Figure 1.</strong> UNIStainNet architecture. Left: overall pipeline with H&amp;E encoder,
-                UNI spatial branch, stain embedding, and SPADE+FiLM decoder. Right: detail of the SPADE+FiLM
-                normalization block combining spatial UNI features and stain-specific FiLM parameters.
-            </figcaption>
+                 alt="UNIStainNet architecture">
+            <p class="caption">
+                <strong>Figure 1.</strong> UNIStainNet architecture. Left: overall pipeline with
+                H&amp;E encoder, UNI spatial conditioning branch, stain embedding, and SPADE+FiLM
+                decoder. Right: detail of the SPADE+FiLM normalization block combining spatial
+                UNI features (&gamma;<sub>s</sub>, &beta;<sub>s</sub>) and stain-specific FiLM
+                parameters (&gamma;<sub>c</sub>, &beta;<sub>c</sub>).
+            </p>
         </figure>
     </div>
-</section>
+</div>
+
+<hr>
 
 <!-- ════════════ Results ════════════ -->
-<section>
-    <div class="container">
-        <h2>Results</h2>
+<div class="container">
+    <div class="section">
+        <h2 class="section-title">Results</h2>
 
-        <h3>Quantitative Results (MIST, Unified Model)</h3>
+        <h3 style="font-size:1.05rem; font-weight:600; margin:1.2rem 0 0.5rem; color:#1a1a1a;">
+            Quantitative Results (MIST, Unified Model)
+        </h3>
         <table>
             <thead>
                 <tr>
@@ -333,141 +322,63 @@
             </tbody>
         </table>
 
-        <h3>Multi-Stain Generation</h3>
-        <p>
-            From a single H&amp;E input, UNIStainNet generates all four IHC stains. The model
-            correctly produces membrane staining patterns for HER2, nuclear punctate patterns
-            for Ki67, and diffuse nuclear staining for ER and PR.
-        </p>
+        <h3 style="font-size:1.05rem; font-weight:600; margin:1.5rem 0 0.5rem; color:#1a1a1a;">
+            Multi-Stain Generation
+        </h3>
         <figure class="figure">
             <img src="static/multistain_gt_gen.jpg"
-                 alt="H&E input with ground truth and generated IHC for HER2, Ki67, ER, PR">
-            <figcaption>
-                <strong>Figure 2.</strong> Multi-stain results on MIST. Each row shows a different
-                stain: H&amp;E input (left), ground truth IHC (center), and UNIStainNet output (right).
-            </figcaption>
+                 alt="Ground truth vs generated IHC for all four stains">
+            <p class="caption">
+                <strong>Figure 2.</strong> Multi-stain generation on MIST. Each row shows a
+                different stain: H&amp;E input (left), ground truth IHC (center), and
+                UNIStainNet output (right). The model produces membrane staining for HER2,
+                nuclear punctate patterns for Ki67, and diffuse nuclear staining for ER and PR.
+            </p>
         </figure>
 
-        <h3>Cross-Stain Generation</h3>
-        <p>
-            Each row uses H&amp;E inputs originally paired with a specific stain (shown with
-            ground truth) and generates all four stains from the same H&amp;E. The diagonal
-            (red-bordered) shows the matched stain; off-diagonal entries demonstrate the model's
-            ability to generate stains it was never explicitly paired with for that tissue.
-        </p>
-        <figure class="figure">
-            <img src="static/cross_stain.jpg"
-                 alt="Cross-stain generation grid showing all 4 stains from each H&E input">
-            <figcaption>
-                <strong>Figure 3.</strong> Cross-stain generation matrix. Rows: H&amp;E inputs
-                from different stain sources. Columns: generated HER2, Ki67, ER, PR. Red borders
-                indicate the matched ground-truth stain.
-            </figcaption>
-        </figure>
-
-        <h3>Comparison with Baselines (BCI)</h3>
-        <p>
-            Compared to ASP and PSPStain, UNIStainNet produces more accurate staining intensity
-            and spatial patterns. ASP often generates near-zero DAB signal (appearing mostly blue),
-            while our method preserves the expected brown chromogen patterns.
-        </p>
+        <h3 style="font-size:1.05rem; font-weight:600; margin:1.5rem 0 0.5rem; color:#1a1a1a;">
+            Comparison with Baselines
+        </h3>
         <figure class="figure">
             <img src="static/bci_comparison.jpg"
-                 alt="Visual comparison with ASP and PSPStain baselines on BCI dataset">
-            <figcaption>
-                <strong>Figure 4.</strong> Visual comparison on BCI (H&amp;E &rarr; HER2).
-                Columns: H&amp;E input, ground truth IHC, ASP, PSPStain, UNIStainNet (ours).
-            </figcaption>
+                 alt="Visual comparison with baselines on BCI">
+            <p class="caption">
+                <strong>Figure 3.</strong> Visual comparison on BCI (H&amp;E &rarr; HER2).
+                ASP generates near-zero DAB signal (appearing mostly blue/purple), while
+                UNIStainNet preserves the expected brown chromogen staining patterns.
+            </p>
+        </figure>
+
+        <figure class="figure">
+            <img src="static/mist_comparison.jpg"
+                 alt="Visual comparison on MIST">
+            <p class="caption">
+                <strong>Figure 4.</strong> Comparison on MIST across methods.
+            </p>
         </figure>
     </div>
-</section>
+</div>
 
-<!-- ════════════ Method ════════════ -->
-<section>
-    <div class="container">
-        <h2>Method Details</h2>
+<hr>
 
-        <h3>UNI Feature Extraction</h3>
-        <p>
-            The 512&times;512 H&amp;E input is divided into a 4&times;4 grid of 128&times;128
-            sub-crops, each resized to 224&times;224 and passed through a frozen UNI ViT-L/16
-            (pretrained on 100M+ histopathology patches). The 14&times;14 patch tokens from each
-            sub-crop are reassembled into a 56&times;56 spatial grid and adaptively pooled to
-            32&times;32, yielding 1,024 spatially-resolved 1024-dimensional tokens.
-        </p>
-
-        <h3>SPADE+FiLM Normalization</h3>
-        <p>
-            At each decoder scale, the UNI spatial features are projected to produce per-pixel
-            scale (&gamma;) and shift (&beta;) parameters that modulate instance-normalized
-            activations. Stain embeddings provide an additional channel-wise FiLM modulation,
-            allowing the same decoder weights to produce different stains.
-        </p>
-
-        <h3>Loss Suite</h3>
-        <p>
-            Designed for the consecutive-section misalignment problem:
-        </p>
-        <table>
-            <thead>
-                <tr><th>Loss</th><th>Purpose</th><th>Misalignment Robustness</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>LPIPS (Perceptual)</td><td>Structural similarity</td><td>Compares at 128px feature level</td></tr>
-                <tr><td>DAB Intensity</td><td>Stain signal accuracy</td><td>Global intensity, position-invariant</td></tr>
-                <tr><td>Unconditional Discriminator</td><td>Realistic appearance</td><td>No spatial conditioning on GT</td></tr>
-                <tr><td>Gram Style</td><td>Texture statistics</td><td>Matches statistics, not positions</td></tr>
-            </tbody>
-        </table>
+<!-- ════════════ BibTeX ════════════ -->
+<div class="container">
+    <div class="section">
+        <h2 class="section-title">BibTeX</h2>
+        <div class="bibtex-box">@article{unistainnet2025,
+  title={UNIStainNet: Foundation-Model-Guided Virtual IHC Staining from H&amp;E},
+  author={Saurav, Jillur Rahman and Pham, Thuong Le Hoai and Mukherjee, Pritam and Yi, Paul and Orr, Brent A. and Luber, Jacob M.},
+  journal={arXiv preprint arXiv:2603.12716},
+  year={2025}
+}</div>
     </div>
-</section>
-
-<!-- ════════════ Clinical Context ════════════ -->
-<section>
-    <div class="container">
-        <h2>Clinical Context</h2>
-        <p>
-            Breast cancer treatment decisions are driven by molecular subtyping based on four IHC
-            biomarkers. Each requires a separate tissue section, consuming precious biopsy material.
-            Virtual staining could conserve tissue, reduce turnaround time, and enable retrospective
-            biomarker analysis on archival H&amp;E slides.
-        </p>
-        <table>
-            <thead>
-                <tr><th>Marker</th><th>Staining Pattern</th><th>Clinical Role</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>HER2</td><td>Membrane (circumferential)</td><td>Targeted therapy eligibility (trastuzumab, T-DXd)</td></tr>
-                <tr><td>Ki67</td><td>Nuclear (% positive nuclei)</td><td>Proliferation index; Luminal A vs B distinction</td></tr>
-                <tr><td>ER</td><td>Nuclear</td><td>Endocrine therapy eligibility</td></tr>
-                <tr><td>PR</td><td>Nuclear</td><td>ER pathway functionality; prognosis refinement</td></tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<!-- ════════════ Demo ════════════ -->
-<section>
-    <div class="container" style="text-align: center;">
-        <h2>Interactive Demo</h2>
-        <p style="max-width: 600px; margin: 0 auto 1.5rem;">
-            Try UNIStainNet on the interactive demo hosted on Hugging Face Spaces.
-            Browse pre-computed results or upload your own H&amp;E images (GPU required for live inference).
-        </p>
-        <a href="https://huggingface.co/spaces/faceless-void/UNIStainNet"
-           target="_blank"
-           style="display:inline-block; padding:0.8rem 2rem; background:var(--accent); color:#fff;
-                  border-radius:6px; text-decoration:none; font-weight:600; font-size:1rem;">
-            Launch Demo
-        </a>
-    </div>
-</section>
+</div>
 
 <!-- ════════════ Footer ════════════ -->
 <footer>
-    <p>UNIStainNet &middot; Virtual IHC Staining from H&amp;E &middot;
-        <a href="https://arxiv.org/abs/2603.12716" style="color:var(--accent); text-decoration:none;">arXiv:2603.12716</a>
-    </p>
+    <a href="https://arxiv.org/abs/2603.12716">Paper</a> &middot;
+    <a href="https://github.com/facevoid/UNIStainNet">Code</a> &middot;
+    <a href="https://huggingface.co/spaces/faceless-void/UNIStainNet">Demo</a>
 </footer>
 
 </body>
