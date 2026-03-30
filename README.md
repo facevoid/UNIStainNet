@@ -1,6 +1,12 @@
 # UNIStainNet: Foundation-Model-Guided Virtual Staining of H&E to IHC
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2603.12716"><img src="https://img.shields.io/badge/arXiv-2603.12716-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://huggingface.co/spaces/faceless-void/UNIStainNet"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Demo-UNIStainNet-blue" alt="Demo"></a>
+  <a href="https://facevoid.github.io/UNIStainNet/"><img src="https://img.shields.io/badge/Project-Page-green" alt="Project Page"></a>
+</p>
+
+<p align="center">
   <img src="assets/overview_figure.png" width="100%"/>
 </p>
 
